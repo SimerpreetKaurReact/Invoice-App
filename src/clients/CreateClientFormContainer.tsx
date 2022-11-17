@@ -21,6 +21,7 @@ export interface responseObject {
 }
 function CreateClientFormContainer(props: { clientId?: string }) {
     const { enqueueSnackbar } = useSnackbar();
+    const [resetForm, setResetForm] = useState(false)
     const [defaultDetails, setDefaultDetails] = useState<CreateClient>({
         name: "",
         email: "",
@@ -59,13 +60,18 @@ function CreateClientFormContainer(props: { clientId?: string }) {
                             swift: ""
                         }
                     })
+                    console.log(res)
                 }).catch((err) => { console.log(err) })
 
         }
     }, [props.clientId])
 
     useEffect(() => {
-        if (error) {
+        if (error && props.clientId) {
+            enqueueSnackbar(`Client updated error `, { variant: "error" })
+        }
+
+        if (error && !props.clientId) {
             enqueueSnackbar(`Client created error: ${error}`, { variant: "error" })
         }
     }, [error])
@@ -85,8 +91,10 @@ function CreateClientFormContainer(props: { clientId?: string }) {
             <CreateClientForm
                 disabled={status === AsyncStateEnum.PENDING}
                 defaultDetails={defaultDetails}
+                resetForm={resetForm}
                 error={error}
                 onCreateClientRequest={async (values) => {
+                    setResetForm(false)
                     const formdetails = {
                         name: values.name,
                         email: values.email,
@@ -104,7 +112,12 @@ function CreateClientFormContainer(props: { clientId?: string }) {
                     const result = await execute({ ...formdetails, id: props.clientId })
                     console.log("CreateClient result", result, data)
                     console.log(error)
-                    if (result) {
+                    if (result && props.clientId) {
+                        enqueueSnackbar(`Client updated successfully`, { variant: "success" })
+                    }
+
+                    if (result && !props.clientId) {
+                        setResetForm(true)
                         enqueueSnackbar(`Client created successfully`, { variant: "success" })
                     }
 

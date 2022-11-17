@@ -1,12 +1,12 @@
 import classes from "../user/login.module.css"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { Button, TextField, Typography, Link, Grid, OutlinedInput, InputAdornment, IconButton, FormHelperText, InputLabel } from "@mui/material";
 import { Box, display } from "@mui/system";
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Co2Sharp, Visibility, VisibilityOff } from '@mui/icons-material';
 
 
 const CreateClientSchema = yup.object({
@@ -40,11 +40,28 @@ interface CreateClientFormProps {
     onCreateClientRequest: (data: CreateClientValues) => Promise<void>
     disabled?: boolean
     error?: string
+    resetForm?: boolean
     defaultDetails: CreateClient
 }
 const CreateClientForm = (props: CreateClientFormProps) => {
-    const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<CreateClientValues>({ resolver: yupResolver(CreateClientSchema) });
+    const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm<CreateClientValues>({ resolver: yupResolver(CreateClientSchema) });
+    useEffect(() => {
+        console.log(props.resetForm)
+        if (props.resetForm) {
+            reset({
+                name: "",
+                email: "",
 
+                companyName: "",
+                VAT: "",
+                registryNumber: "",
+                companyAddress: "",
+                IBAN: "",
+                SWIFT: ""
+
+            })
+        }
+    }, [props.resetForm])
 
 
     return (
@@ -59,7 +76,7 @@ const CreateClientForm = (props: CreateClientFormProps) => {
                 </Grid>
                 <Grid item sm={6} md={6} mt={4} justifyContent="center" >
                     <Typography variant="h5" align="center">
-                        Create Client
+                        {props.defaultDetails.name ? "Edit" : "Create"} Client
                     </Typography>
 
                     {/* isSubmitting--{isSubmitting.toString()} */}

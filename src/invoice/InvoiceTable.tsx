@@ -75,7 +75,8 @@ export const InvoiceTableHeader = (props: {
                     align="right"
                     data-test={headCell.id.split(/(?=[A-Z])/).join("-").toLowerCase()}
                 >
-                    {headCell.id != "invoiceNumber" && props.editQuery === true || props.editQuery === undefined ?
+
+                    {headCell.id != "invoiceNumber" && (props.editQuery === true || props.editQuery === undefined) ?
                         <TableSortLabel
                             active={orderBy === headCell.id && order !== "no sort"}
                             direction={orderBy === headCell.id && order !== "no sort" ? order : 'asc'}

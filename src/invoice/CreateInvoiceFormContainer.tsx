@@ -52,7 +52,7 @@ function CreateInvoiceFormContainer(props: { invoiceId?: string, button?: string
     useEffect(() => {
         console.log("execute get invoice response")
         executeGetClient(undefined).then((res) => {
-            executeGetInvoice({ invoiceId: props.invoiceId })
+            executeGetInvoice({ ...props.invoiceId && { invoiceId: props.invoiceId } })
                 .then(invoiceRes => {
 
                     setInvoiceApiResponse(invoiceRes)
@@ -61,13 +61,13 @@ function CreateInvoiceFormContainer(props: { invoiceId?: string, button?: string
                     )
                     setDefaultDetails({
 
-                        invoiceNumber: invoiceRes.invoice_number,
-                        client: clientName.toString(),
-                        date: new Date(invoiceRes.date),
-                        dueDate: new Date(invoiceRes.dueDate),
-                        projectCode: invoiceRes.projectCode,
-                        items: invoiceRes.meta.items,
-                        id: invoiceRes.id
+                        invoiceNumber: invoiceRes?.invoice_number,
+                        client: clientName?.toString(),
+                        date: new Date(invoiceRes?.date),
+                        dueDate: new Date(invoiceRes?.dueDate),
+                        projectCode: invoiceRes?.projectCode,
+                        items: invoiceRes?.meta?.items,
+                        id: invoiceRes?.id
                     })
 
 

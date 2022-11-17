@@ -42,6 +42,8 @@ const headCells: readonly HeadCell[] = [
         label: 'Total Billed',
     },
 
+
+
 ];
 
 
@@ -52,13 +54,14 @@ export const ClientsTable = (props: {
     const [order, setOrder] = React.useState<Order>('no sort');
     const [orderBy, setOrderBy] = React.useState<keyof ClientTableData>('clientName');
     const onRowClickEvent = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
+
         props.updateRoute(`/clients/${id}`)
     }
     const onAddInvoiceEvent = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, id: string) => {
         props.updateRoute(`/invoices/new`)
     }
     const onEditClientEvent = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, id: string) => {
-        props.updateRoute(`/clients/${id}/edit`)
+        props.updateRoute(`/clients/${id}`)
 
 
     }
@@ -110,8 +113,8 @@ export const ClientsTable = (props: {
                             console.log("click within table cell")
                         }} >
                             <BasicMenu
-                                menu={[{ name: "Add new invoice", Event: onAddInvoiceEvent, dataTest: "invoice-add" },
-                                { name: "Edit client", Event: onEditClientEvent, dataTest: "client-add" }]}
+                                menu={[{ name: "Add new invoice", Event: (e) => onAddInvoiceEvent(e, client.id), dataTest: "invoice-add" },
+                                { name: "Edit client", Event: (e) => onEditClientEvent(e, client.id), dataTest: "client-add" }]}
 
                             />
                         </TableCell>
